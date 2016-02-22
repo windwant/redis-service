@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:redis="http://www.springframework.org/schema/redis"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd">
+
+    <bean id="jedisConnFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:use-pool="true" p:host-name="${redis.host}" p:port="${redis.port}"/>
+
+       <!-- redis template definition -->
+    <bean id="redisTemplate"
+          class="org.springframework.data.redis.core.RedisTemplate"
+          p:connection-factory-ref="jedisConnFactory"/>
+
+    <!--Redis命名空间-->
+    <bean id="mdpListener" class="com.redis.webapp.service.impl.MessageDelegateListenerImpl" />
+    <bean id="mdelegateListener" class="com.redis.webapp.service.impl.DefaultMessageDelegate" />
+
+    <redis:listener-container connection-factory="jedisConnFactory">
+        <redis:listener ref="mdpListener" topic="spring*" />
+        <redis:listener ref="mdelegateListener" method="handleMessage"
+                        topic="cctv5 cctv6 nbtv hello*" />
+    </redis:listener-container>
+
+    <!-- Bean Configuration -->
+    <bean id="messageListener"
+          class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+        <constructor-arg>
+            <bean class="com.redis.webapp.service.impl.MessageDelegateListenerImpl" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="redisContainer"
+          class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+        <property name="connectionFactory" ref="jedisConnFactory" />
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="messageListener">
+                    <list>
+                        <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                            <constructor-arg value="springtv" />
+                        </bean>
+                        <bean class="org.springframework.data.redis.listener.PatternTopic">
+                            <constructor-arg value="hello*" />
+                        </bean>
+                        <bean class="org.springframework.data.redis.listener.PatternTopic">
+                            <constructor-arg value="tv*" />
+                        </bean>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>
