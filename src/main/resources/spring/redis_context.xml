@@ -19,6 +19,7 @@
     <bean id="mdpListener" class="com.redis.webapp.service.impl.MessageDelegateListenerImpl" />
     <bean id="mdelegateListener" class="com.redis.webapp.service.impl.DefaultMessageDelegate" />
 
+    <!--配置listener两种方式-->
     <redis:listener-container connection-factory="jedisConnFactory">
         <redis:listener ref="mdpListener" topic="spring*" />
         <redis:listener ref="mdelegateListener" method="handleMessage"
