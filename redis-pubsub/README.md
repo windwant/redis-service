@@ -1,4 +1,4 @@
-# redies
+# redis
 结合Spring 简单 订阅/发布系统
 
 使用Spring Data Redis操作Redis
