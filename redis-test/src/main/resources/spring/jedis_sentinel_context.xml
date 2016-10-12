@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:redis="http://www.springframework.org/schema/redis"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd">
+
+    <context:property-placeholder location="conf.properties"/>
+
+    <bean id="jedisSentinelConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxActive}"/>
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+    </bean>
+
+    <bean id="redisSentinel" class="redis.clients.jedis.JedisSentinelPool">
+        <constructor-arg index="0" value="mymaster" />
+        <constructor-arg index="1">
+            <set>
+                <value>127.0.0.1:6377</value>
+                <value>127.0.0.1:6376</value>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="2" ref="jedisSentinelConfig" />
+
+    </bean>
+</beans>
