@@ -12,6 +12,13 @@ sentinel down-after-milliseconds mymaster 60000
 sentinel failover-timeout mymaster 180000
 sentinel parallel-syncs mymaster 1
 
+port 6377 //sentinel端口
+sentinel monitor mymaster 127.0.0.1 6379 2  //master配置
+sentinel down-after-milliseconds mymaster 60000
+sentinel failover-timeout mymaster 180000
+sentinel parallel-syncs mymaster 1
+
+
 
 Redis Sentinel provides high availability for Redis. In practical terms this means that using Sentinel you can create a Redis deployment that resists without human intervention to certain kind of failures.
 Redis Sentinel also provides other collateral tasks such as monitoring, notifications and acts as a configuration provider for clients.
