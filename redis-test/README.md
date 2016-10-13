@@ -21,9 +21,13 @@ sentinel failover-timeout mymaster 180000
 sentinel parallel-syncs mymaster 1
 
 port 6377 //sentinel端口
+
 sentinel monitor mymaster 127.0.0.1 6379 2  //master配置
+
 sentinel down-after-milliseconds mymaster 60000
+
 sentinel failover-timeout mymaster 180000
+
 sentinel parallel-syncs mymaster 1
 
 
