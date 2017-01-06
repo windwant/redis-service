@@ -76,4 +76,7 @@ public class RedisOpt {
     public void convertAndSend(String channel, Object message){
         redisTemplate.convertAndSend(channel, message);
     }
+
+    public void blockPull(){
+    }
 }

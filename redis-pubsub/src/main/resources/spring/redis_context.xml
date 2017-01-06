@@ -13,7 +13,11 @@
        <!-- redis template definition -->
     <bean id="redisTemplate"
           class="org.springframework.data.redis.core.RedisTemplate"
-          p:connection-factory-ref="jedisConnFactory"/>
+          p:connection-factory-ref="jedisConnFactory">
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+    </bean>
 
     <!--Redis命名空间-->
     <bean id="mdpListener" class="com.redis.pubsub.service.impl.MessageDelegateListenerImpl" />
