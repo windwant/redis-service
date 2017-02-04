@@ -1,6 +1,6 @@
 package com.redis.pubsub.service.impl;
 
-import com.redis.pubsub.service.MessageDelegate;
+import com.redis.pubsub.service.SelfDefineMessageDelegate;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by aayongche on 2016/2/19.
  */
-public class DefaultMessageDelegate implements MessageDelegate {
+public class DefaultSelfDefineMessageDelegate implements SelfDefineMessageDelegate {
     public void handleMessage(String message) {
         System.out.println("handleMessage(String message):" + message);
     }

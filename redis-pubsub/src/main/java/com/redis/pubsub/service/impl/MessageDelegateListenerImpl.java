@@ -12,7 +12,7 @@ public class MessageDelegateListenerImpl implements MessageListener {
 
     public void onMessage(Message message, byte[] bytes) {
         try {
-            System.out.println("channel:" + new String(message.getChannel())
+            System.out.println("subscribe message channel:" + new String(message.getChannel())
                     + ",message:" + new String(message.getBody(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

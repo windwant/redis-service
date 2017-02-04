@@ -19,16 +19,19 @@
         </property>
     </bean>
 
+    <!-- redis=========================================================================================== -->
     <!--Redis命名空间-->
     <bean id="mdpListener" class="com.redis.pubsub.service.impl.MessageDelegateListenerImpl" />
-    <bean id="mdelegateListener" class="com.redis.pubsub.service.impl.DefaultMessageDelegate" />
+    <bean id="selfDelegateListener" class="com.redis.pubsub.service.impl.DefaultSelfDefineMessageDelegate" />
 
-    <!--配置listener两种方式-->
+    <!--配置redis listener listener-container-->
     <redis:listener-container connection-factory="jedisConnFactory">
-        <redis:listener ref="mdpListener" topic="spring*" />
-        <redis:listener ref="mdelegateListener" method="handleMessage"
+        <redis:listener ref="mdpListener" topic="springdata* springtemplate*" />
+        <redis:listener ref="selfDelegateListener" method="handleMessage"
                         topic="cctv5 cctv6 nbtv hello*" />
     </redis:listener-container>
+
+    <!-- spring data===================================================================================== -->
 
     <!-- Bean Configuration -->
     <bean id="messageListener"
@@ -38,6 +41,7 @@
         </constructor-arg>
     </bean>
 
+    <!--配置spring redis listener RedisMessageListenerContainer-->
     <bean id="redisContainer"
           class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
         <property name="connectionFactory" ref="jedisConnFactory" />
@@ -59,4 +63,5 @@
             </map>
         </property>
     </bean>
+    <!-- ================================================================================================ -->
 </beans>
