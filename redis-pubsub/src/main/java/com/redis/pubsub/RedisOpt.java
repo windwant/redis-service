@@ -1,13 +1,18 @@
 package com.redis.pubsub;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -77,6 +82,50 @@ public class RedisOpt {
         redisTemplate.convertAndSend(channel, message);
     }
 
+    JedisPool jedisPool;
+
+    @Value("${redis.master.host}")
+    public String redisHost;
+
+    @Value("${redis.master.port}")
+    public Integer redisport;
+
+    public JedisPool getJedisPool() {
+        if(jedisPool == null){
+            jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisport);
+        }
+        return jedisPool;
+    }
+
+    /**
+     * jedis blpop 阻塞取redis中队列头部值 超世3s
+     */
     public void blockPull(){
+        Jedis jedis = getJedisPool().getResource();
+        while (true) {
+            System.out.println(jedis.blpop(3000, "springqueue"));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * jedis 写入redis队列值
+     */
+    public void setJedisValue(){
+        Jedis jedis = getJedisPool().getResource();
+        while (true) {
+            String value = String.valueOf(ThreadLocalRandom.current().nextInt(100));
+            jedis.lpush ("springqueue", value);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("springdate value: " + value);
+        }
     }
 }

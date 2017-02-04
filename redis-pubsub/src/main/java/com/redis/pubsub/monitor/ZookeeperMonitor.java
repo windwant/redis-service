@@ -88,7 +88,7 @@ public class ZookeeperMonitor {
         try {
             String nodePath = parentPath + path;
             if(curatorFramework.checkExists().forPath(nodePath) == null){
-                curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(nodePath);
+                curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(nodePath);
                 System.out.println("create node path: " + nodePath);
                 return true;
             }
