@@ -1,11 +1,13 @@
 package com.redis.pubsub;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisPubSub;
 
 
 import javax.annotation.Resource;
@@ -90,6 +92,20 @@ public class RedisOpt {
     @Value("${redis.master.port}")
     public Integer redisport;
 
+    public JedisConnectionFactory getJedisConnectionFactory() {
+        if(jedisConnectionFactory == null){
+            jedisConnectionFactory = new JedisConnectionFactory();
+            //TODO
+        }
+        return jedisConnectionFactory;
+    }
+
+    public void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
+        this.jedisConnectionFactory = jedisConnectionFactory;
+    }
+
+    public JedisConnectionFactory jedisConnectionFactory;
+
     public JedisPool getJedisPool() {
         if(jedisPool == null){
             jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisport);
@@ -119,7 +135,7 @@ public class RedisOpt {
         Jedis jedis = getJedisPool().getResource();
         while (true) {
             String value = String.valueOf(ThreadLocalRandom.current().nextInt(100));
-            jedis.lpush ("springqueue", value);
+            jedis.lpush("springqueue", value);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -127,5 +143,30 @@ public class RedisOpt {
             }
             System.out.println("springdate value: " + value);
         }
+    }
+
+    public void jedisPublish(){
+        Jedis jedis = getJedisPool().getResource();
+        while (true) {
+            String value = String.valueOf(ThreadLocalRandom.current().nextInt(100));
+            jedis.publish("sdata", value);
+            System.out.println("publish value: " + value);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void jedisSubscribe(){
+        Jedis jedis = getJedisPool().getResource();
+        jedis.subscribe(new JedisPubSub() {
+            @Override
+            public void onMessage(String channel, String message) {
+                super.onMessage(channel, message);
+                System.out.println("subscribe channel: " + channel + ", message: " + message);
+            }
+        }, "sdata");
     }
 }

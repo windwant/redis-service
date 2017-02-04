@@ -30,4 +30,14 @@ public class TestServer extends TestCase {
         ClassPathXmlApplicationContext ct = new ClassPathXmlApplicationContext("classpath:/spring/*.xml");
         opt = (RedisOpt) ct.getBean("trr");
     }
+
+    @Test
+    public void testPub(){
+        opt.jedisPublish();
+    }
+
+    @Test
+    public void testSub(){
+        opt.jedisSubscribe();
+    }
 }
