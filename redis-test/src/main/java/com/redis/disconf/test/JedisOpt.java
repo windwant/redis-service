@@ -1,4 +1,4 @@
-package com.redis.test;
+package com.redis.disconf.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

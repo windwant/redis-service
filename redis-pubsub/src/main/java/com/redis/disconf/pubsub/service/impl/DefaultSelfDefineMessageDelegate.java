@@ -1,6 +1,6 @@
-package com.redis.pubsub.service.impl;
+package com.redis.disconf.pubsub.service.impl;
 
-import com.redis.pubsub.service.SelfDefineMessageDelegate;
+import com.redis.disconf.pubsub.service.SelfDefineMessageDelegate;
 
 import java.io.Serializable;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.redis.pubsub.monitor;
+package com.redis.disconf.pubsub.monitor;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;

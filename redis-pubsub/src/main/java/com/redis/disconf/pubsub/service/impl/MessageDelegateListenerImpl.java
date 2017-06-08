@@ -1,4 +1,4 @@
-package com.redis.pubsub.service.impl;
+package com.redis.disconf.pubsub.service.impl;
 
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;

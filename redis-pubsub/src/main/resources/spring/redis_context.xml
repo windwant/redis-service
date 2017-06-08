@@ -21,8 +21,8 @@
 
     <!-- redis=========================================================================================== -->
     <!--Redis命名空间-->
-    <bean id="mdpListener" class="com.redis.pubsub.service.impl.MessageDelegateListenerImpl" />
-    <bean id="selfDelegateListener" class="com.redis.pubsub.service.impl.DefaultSelfDefineMessageDelegate" />
+    <bean id="mdpListener" class="com.redis.disconf.pubsub.service.impl.MessageDelegateListenerImpl" />
+    <bean id="selfDelegateListener" class="com.redis.disconf.pubsub.service.impl.DefaultSelfDefineMessageDelegate" />
 
     <!--配置redis listener listener-container-->
     <redis:listener-container connection-factory="jedisConnFactory">
@@ -37,7 +37,7 @@
     <bean id="messageListener"
           class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
         <constructor-arg>
-            <bean class="com.redis.pubsub.service.impl.MessageDelegateListenerImpl" />
+            <bean class="com.redis.disconf.pubsub.service.impl.MessageDelegateListenerImpl" />
         </constructor-arg>
     </bean>
 

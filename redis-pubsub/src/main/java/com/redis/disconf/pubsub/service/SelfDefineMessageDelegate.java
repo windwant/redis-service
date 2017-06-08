@@ -1,4 +1,4 @@
-package com.redis.pubsub.service;
+package com.redis.disconf.pubsub.service;
 
 import java.io.Serializable;
 import java.util.Map;

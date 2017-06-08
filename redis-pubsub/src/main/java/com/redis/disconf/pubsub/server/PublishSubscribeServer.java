@@ -1,6 +1,6 @@
-package com.redis.pubsub.server;
+package com.redis.disconf.pubsub.server;
 
-import com.redis.pubsub.RedisOpt;
+import com.redis.disconf.pubsub.RedisOpt;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 

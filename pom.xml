@@ -8,6 +8,7 @@
   <modules>
     <module>redis-test</module>
     <module>redis-pubsub</module>
+    <module>redis-disconf</module>
   </modules>
   <name>redis Maven Webapp</name>
   <url>http://maven.apache.org</url>
