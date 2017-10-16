@@ -8,3 +8,7 @@ java spring redies
    JedisSentinelPool 哨兵模式
 3. redis 统一配置管理
 4. lua脚本实现分布式锁
+    EVAL script numkeys key [key ...] arg [arg ...]
+
+    起始版本：2.6.0
+    时间复杂度：取决于脚本本身的执行的时间复杂度。
