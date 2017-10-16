@@ -1,3 +1,7 @@
 .idea/
 *.iml
 redis-pubsub/target/
+*.class
+redis-disconf/target/classes/applicationContext.xml
+redis-disconf/
+redis-test/target/

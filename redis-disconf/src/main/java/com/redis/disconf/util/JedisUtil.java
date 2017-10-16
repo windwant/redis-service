@@ -1,33 +1,20 @@
 package com.redis.disconf.util;
 
-import org.springframework.data.redis.connection.jedis.JedisConnection;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * Created by windwant on 2017/6/8.
  */
 public class JedisUtil {
 
-    private static JedisConnectionFactory jf;
+    private static JedisPool jp;
 
-    private static String host;
-
-    private static Integer port;
-
-    public static void init(String host, Integer port){
-        jf = new JedisConnectionFactory();
-        jf.setHostName(host);
-        jf.setPort(port);
-        JedisUtil.host = host;
-        JedisUtil.port = port;
-    }
-
-    public static Jedis getJedis(){
-        if(jf == null){
-            init(JedisUtil.host, JedisUtil.port);
+    public static Jedis getJedis(String host, Integer port){
+        if(jp == null){
+            jp = new JedisPool(host, port);
         }
-        return jf.getConnection().getNativeConnection();
+        return jp.getResource();
     }
 
 
