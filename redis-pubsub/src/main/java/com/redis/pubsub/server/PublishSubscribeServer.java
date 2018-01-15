@@ -1,6 +1,6 @@
-package com.redis.disconf.pubsub.server;
+package com.redis.pubsub.server;
 
-import com.redis.disconf.pubsub.RedisOpt;
+import com.redis.pubsub.RedisOpt;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
@@ -20,7 +20,7 @@ public class PublishSubscribeServer {
             try {
                 for (int i = 0; i < Integer.MAX_VALUE; i++) {
                     tr.convertAndSend(channel, message);
-                    System.out.println("publish message channel: " + channel + ", message: " + message);
+                    System.out.println("PPPPP+++++: publish message, channel: " + channel + ", message: " + message);
                     Thread.sleep(2000);
                 }
                 break;

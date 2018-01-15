@@ -1,4 +1,4 @@
-package com.redis.disconf.pubsub;
+package com.redis.pubsub;
 
 import junit.framework.TestCase;
 import org.junit.Test;

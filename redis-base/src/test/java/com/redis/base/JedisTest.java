@@ -1,4 +1,4 @@
-package com.redis.disconf.test;
+package com.redis.base;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

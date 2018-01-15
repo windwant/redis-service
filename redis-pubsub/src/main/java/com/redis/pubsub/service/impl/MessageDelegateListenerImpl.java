@@ -1,4 +1,4 @@
-package com.redis.disconf.pubsub.service.impl;
+package com.redis.pubsub.service.impl;
 
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -18,7 +18,7 @@ public class MessageDelegateListenerImpl implements MessageListener {
 
     public void onMessage(Message message, byte[] bytes) {
         try {
-            System.out.println("subscribe message channel:" + new String(message.getChannel())
+            System.out.println("CCCCC-----: " + getClass().getSimpleName() + "subscribe message, channel:" + new String(message.getChannel())
                     + ",message:" + new String(message.getBody(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

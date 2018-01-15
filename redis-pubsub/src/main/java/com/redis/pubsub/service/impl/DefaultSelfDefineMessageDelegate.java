@@ -1,6 +1,6 @@
-package com.redis.disconf.pubsub.service.impl;
+package com.redis.pubsub.service.impl;
 
-import com.redis.disconf.pubsub.service.SelfDefineMessageDelegate;
+import com.redis.pubsub.service.SelfDefineMessageDelegate;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -18,18 +18,18 @@ public class DefaultSelfDefineMessageDelegate implements SelfDefineMessageDelega
     }
 
     public void handleMessage(byte[] message) {
-        System.out.println("handleMessage(byte[] message):"
+        System.out.println("CCCCC-----: " + getClass().getSimpleName() + " handleMessage(byte[] message):"
                 + new String(message));
     }
 
     public void handleMessage(Serializable message) {
-        System.out.println("handleMessage(Serializable message):"
+        System.out.println("CCCCC-----: " + getClass().getSimpleName() + " handleMessage(Serializable message):"
                 + message.toString());
     }
 
     public void handleMessage(Serializable message, String channel) {
         System.out
-                .println("handleMessage(Serializable message, String channel):"
+                .println("CCCCC-----: " + getClass().getSimpleName() + " handleMessage(Serializable message, String channel):"
                         + message.toString() + ", channel:" + channel);
     }
 }

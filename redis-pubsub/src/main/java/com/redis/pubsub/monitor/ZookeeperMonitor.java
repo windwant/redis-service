@@ -1,4 +1,4 @@
-package com.redis.disconf.pubsub.monitor;
+package com.redis.pubsub.monitor;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -50,23 +50,28 @@ public class ZookeeperMonitor {
     }
 
     @Value("${zookeeper.parent.path}")
-    private String parentPath;
+    private String parentPath; //注册父路径
 
-    private CuratorFramework curatorFramework;
+    private CuratorFramework curatorFramework; //high-level API that greatly simplifies using ZooKeeper
 
     public ZookeeperMonitor() {
 
     }
 
-    @PostConstruct
+    @PostConstruct //method that needs to be executed after dependency injection is done to perform any initialization
     public void start(){
+        //重试策略 ExponentialBackoffRetry：重试指定的次数, 且每一次重试之间停顿的时间逐渐增加
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        //Factory methods for creating framework-style clients
         curatorFramework = CuratorFrameworkFactory.builder().connectString(host).retryPolicy(retryPolicy).build();
         curatorFramework.start();
 
+        //utility that attempts to keep all data from all children of a ZK path locally cached watch and response
         final PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework, parentPath, true);
         try {
+            //cached之后分发事件
             pathChildrenCache.start(StartMode.POST_INITIALIZED_EVENT);
+            //添加监听
             pathChildrenCache.getListenable().addListener(new PathChildrenCacheListener() {
                 public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                     if(event.getType() == Type.CHILD_REMOVED){
@@ -84,6 +89,10 @@ public class ZookeeperMonitor {
         createNode();
     }
 
+    /**
+     * 创建节点
+     * @return
+     */
     protected boolean createNode(){
         try {
             String nodePath = parentPath + path;

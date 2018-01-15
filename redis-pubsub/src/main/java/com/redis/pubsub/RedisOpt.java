@@ -1,4 +1,4 @@
-package com.redis.disconf.pubsub;
+package com.redis.pubsub;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;

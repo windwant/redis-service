@@ -10,5 +10,5 @@
 
     <context:component-scan base-package="com.redis.pubsub"/>
     <context:property-placeholder location="classpath*:conf.properties"/>
-    <bean class="com.redis.disconf.pubsub.monitor.ZookeeperMonitor" init-method="start"/>
+    <bean class="com.redis.pubsub.monitor.ZookeeperMonitor" init-method="start"/>
 </beans>

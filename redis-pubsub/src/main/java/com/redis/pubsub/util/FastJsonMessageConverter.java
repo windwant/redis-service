@@ -1,4 +1,4 @@
-package com.redis.disconf.pubsub.util;
+package com.redis.pubsub.util;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.logging.Log;
