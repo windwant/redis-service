@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 /**
- * Created by windwant on 2017/2/4.
+ * zookeeper服务监控
  */
 @Component
 public class ZookeeperMonitor {

@@ -24,13 +24,13 @@ public class DisconfTask {
      */
     public int run() {
         try {
-            generateLock();
+            generateLock(); //设置测试分布式锁 k v 过期时间 10s
             while (true) {
-                Thread.sleep(5000);
+                Thread.sleep(5000);//每个5秒 获取一次 k v
                 String value = redisService.getKey(REDIS_KEY);
                 System.out.println("redis( " + jedisConfig.getHost() + ","
                         + jedisConfig.getPort() + ")  get key: " + REDIS_KEY + " value: " + value);
-                if(value == null) generateLock();
+                if(value == null) generateLock(); //k v过期则重新生成分布式锁k v
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,6 +39,10 @@ public class DisconfTask {
         return 0;
     }
 
+    /**
+     * 生成锁 k v
+     * @return
+     */
     private boolean generateLock(){
         boolean result = redisService.setLockKey(REDIS_KEY, REDIS_VALUE, 10);
         System.out.println("set lock key: " + REDIS_KEY + ", value: " + REDIS_VALUE + ", seconds: " + 10 + ", result: " + result);

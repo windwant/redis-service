@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Created by aayongche on 2016/2/19.
+ * 自定义消息接口
  */
 public interface SelfDefineMessageDelegate {
     void handleMessage(String message);

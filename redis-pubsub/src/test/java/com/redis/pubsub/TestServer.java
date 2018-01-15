@@ -8,7 +8,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by aayongche on 2016/2/19.
  */
 public class TestServer extends TestCase {
 
@@ -16,12 +15,12 @@ public class TestServer extends TestCase {
     RedisOpt opt;
     @Test
     public void testJedisBlpop() throws InterruptedException, UnsupportedEncodingException {
-        opt.blockPull();
+        opt.blockPull("test");
     }
 
     @Test
     public void testJedisSetValue() throws InterruptedException, UnsupportedEncodingException {
-        opt.setJedisValue();
+        opt.setJedisValue("test", "test");
     }
 
     @Override
@@ -33,11 +32,11 @@ public class TestServer extends TestCase {
 
     @Test
     public void testPub(){
-        opt.jedisPublish();
+        opt.jedisPublish("test");
     }
 
     @Test
     public void testSub(){
-        opt.jedisSubscribe();
+        opt.jedisSubscribe("test");
     }
 }

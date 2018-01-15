@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
- * Redis配置文件
+ * Redis配置文件 获取不到则使用本地
  *
  * @author windwant
  * @version 2017-6-8
  */
 @Service
 @Scope("singleton")
-@DisconfFile(filename = "redis.properties")
+@DisconfFile(filename = "redis.properties") //配置中心 配置文件名
 public class JedisConfig {
 
     // 代表连接地址
@@ -27,7 +27,7 @@ public class JedisConfig {
      *
      * @return
      */
-    @DisconfFileItem(name = "redis.host", associateField = "host")
+    @DisconfFileItem(name = "redis.host", associateField = "host") //对应配置item
     public String getHost() {
         return host;
     }

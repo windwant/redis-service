@@ -5,7 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
 /**
- * Created by windwant on 2017/2/4.
+ * pubsub server.
  */
 public class PublishSubscribeServer {
 

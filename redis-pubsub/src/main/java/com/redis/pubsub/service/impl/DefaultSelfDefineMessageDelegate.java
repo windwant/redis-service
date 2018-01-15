@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Created by aayongche on 2016/2/19.
+ * 自定义消息接口实现
  */
 public class DefaultSelfDefineMessageDelegate implements SelfDefineMessageDelegate {
     public void handleMessage(String message) {

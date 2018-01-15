@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by aayongche on 2016/2/19.
+ * Spring 消息接口实现
  */
 public class MessageDelegateListenerImpl implements MessageListener {
 

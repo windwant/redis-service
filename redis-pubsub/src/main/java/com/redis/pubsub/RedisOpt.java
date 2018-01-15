@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by aayongche on 2016/2/19.
+ * Redis 基本操作
  */
 @Component("trr")
 public class RedisOpt {
@@ -29,20 +29,47 @@ public class RedisOpt {
     @Resource(name="redisTemplate")
     public RedisTemplate redisTemplate;
 
+    /**
+     * 添加 k v
+     * @param userId
+     * @param name
+     */
     public void add(String userId, String name) {
         redisTemplate.opsForValue().set(userId, name);
         System.out.println(redisTemplate.opsForValue().get(userId));
     }
+
+    /**
+     * 获取 k v
+     * @param userId
+     * @return
+     */
     public Object get(String userId) {
         return redisTemplate.opsForValue().get(userId);
     }
 
+    /**
+     * 检验存在
+     * @param userId
+     */
     public void check(String userId) {
         System.out.println(redisTemplate.hasKey(userId));
     }
+
+    /**
+     * 删除
+     * @param userId
+     */
     public void del(String userId) {
         redisTemplate.delete(userId);
     }
+
+    /**
+     * 过期
+     * @param userId
+     * @param name
+     * @param time
+     */
     public void addExpire(String userId, String name,  int time) {
         redisTemplate.opsForValue().set(userId, name);
         redisTemplate.expire(userId, time, TimeUnit.SECONDS);
@@ -106,6 +133,7 @@ public class RedisOpt {
 
     public JedisConnectionFactory jedisConnectionFactory;
 
+
     public JedisPool getJedisPool() {
         if(jedisPool == null){
             jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisport);
@@ -114,12 +142,12 @@ public class RedisOpt {
     }
 
     /**
-     * jedis blpop 阻塞取redis中队列头部值 超世3s
+     * jedis blpop 阻塞取redis中队列头部值 超时3s
      */
-    public void blockPull(){
+    public void blockPull(String queue){
         Jedis jedis = getJedisPool().getResource();
         while (true) {
-            System.out.println(jedis.blpop(3000, "springqueue"));
+            System.out.println(jedis.blpop(3000, queue));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -131,25 +159,29 @@ public class RedisOpt {
     /**
      * jedis 写入redis队列值
      */
-    public void setJedisValue(){
+    public void setJedisValue(String queue, String value){
         Jedis jedis = getJedisPool().getResource();
         while (true) {
-            String value = String.valueOf(ThreadLocalRandom.current().nextInt(100));
-            jedis.lpush("springqueue", value);
+//            String value = String.valueOf(ThreadLocalRandom.current().nextInt(100));
+            jedis.lpush(queue, value);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("springdate value: " + value);
+            System.out.println(queue + " value: " + value);
         }
     }
 
-    public void jedisPublish(){
+    /**
+     * 发布主题
+     * @param topic
+     */
+    public void jedisPublish(String topic){
         Jedis jedis = getJedisPool().getResource();
         while (true) {
             String value = String.valueOf(ThreadLocalRandom.current().nextInt(100));
-            jedis.publish("sdata", value);
+            jedis.publish(topic, value);
             System.out.println("publish value: " + value);
             try {
                 Thread.sleep(1000);
@@ -159,7 +191,10 @@ public class RedisOpt {
         }
     }
 
-    public void jedisSubscribe(){
+    /**
+     * 订阅主题
+     */
+    public void jedisSubscribe(String topic){
         Jedis jedis = getJedisPool().getResource();
         jedis.subscribe(new JedisPubSub() {
             @Override
@@ -167,6 +202,6 @@ public class RedisOpt {
                 super.onMessage(channel, message);
                 System.out.println("subscribe channel: " + channel + ", message: " + message);
             }
-        }, "sdata");
+        }, topic);
     }
 }
