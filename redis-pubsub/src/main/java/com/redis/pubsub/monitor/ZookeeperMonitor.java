@@ -10,6 +10,8 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent.Type;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,8 @@ import javax.annotation.PostConstruct;
  */
 @Component
 public class ZookeeperMonitor {
+    private static final Logger logger = LoggerFactory.getLogger(ZookeeperMonitor.class);
+
     @Value("${zookeeper.host}")
     private String host;
     @Value("${zookeeper.path}")
@@ -76,7 +80,7 @@ public class ZookeeperMonitor {
                 public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                     if(event.getType() == Type.CHILD_REMOVED){
                         if((parentPath + path).equals(event.getData().getPath())){
-                            System.out.println("path " + path + " removed, begin recreate!");
+                            logger.info("path: {}, removed, begin recreate!", path);
                             createNode();
                         }
                     }
@@ -98,7 +102,7 @@ public class ZookeeperMonitor {
             String nodePath = parentPath + path;
             if(curatorFramework.checkExists().forPath(nodePath) == null){
                 curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(nodePath);
-                System.out.println("create node path: " + nodePath);
+                logger.info("create node path: {}", nodePath);
                 return true;
             }
         } catch (Exception e) {
