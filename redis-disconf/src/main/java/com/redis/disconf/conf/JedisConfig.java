@@ -2,6 +2,9 @@ package com.redis.disconf.conf;
 
 import com.baidu.disconf.client.common.annotations.DisconfFile;
 import com.baidu.disconf.client.common.annotations.DisconfFileItem;
+import com.baidu.disconf.client.common.update.IDisconfUpdate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Scope("singleton")
 @DisconfFile(filename = "redis.properties") //配置中心 配置文件名
-public class JedisConfig {
+public class JedisConfig implements IDisconfUpdate {
+
+    private static final Logger logger = LoggerFactory.getLogger(JedisConfig.class);
 
     // 代表连接地址
     private String host;
@@ -48,5 +53,10 @@ public class JedisConfig {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    //监听重载
+    public void reload() throws Exception {
+        logger.info("properties reload: host {}, port {}", host, port);
     }
 }
