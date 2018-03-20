@@ -25,13 +25,16 @@ public class DisconfTask {
      */
     public int run() {
         try {
-            generateLock(); //设置测试分布式锁 k v 过期时间 10s
-            while (true) {
+            boolean lock = generateLock(); //设置测试分布式锁 k v 过期时间 10s
+            while (lock) {
                 Thread.sleep(5000);//每个5秒 获取一次 k v
                 String value = redisService.getKey(REDIS_KEY);
                 System.out.println("redis( " + jedisConfig.getHost() + ","
                         + jedisConfig.getPort() + ")  get key: " + REDIS_KEY + " value: " + value);
-                if(value == null) generateLock(); //k v过期则重新生成分布式锁k v
+                if(value == null) {
+                    System.out.println("ttl, lock key invalid");
+                    break; //锁过期 跳出循环
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
