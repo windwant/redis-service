@@ -16,9 +16,11 @@
     </bean>
 
     <bean id="redisSentinel" class="redis.clients.jedis.JedisSentinelPool">
+        <!--redis master name-->
         <constructor-arg index="0" value="mymaster" />
         <constructor-arg index="1">
             <set>
+                <!--sentinel host-->
                 <value>127.0.0.1:6377</value>
                 <value>127.0.0.1:6376</value>
             </set>

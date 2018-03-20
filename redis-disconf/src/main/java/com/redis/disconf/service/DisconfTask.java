@@ -1,6 +1,7 @@
 package com.redis.disconf.service;
 
 import com.redis.disconf.conf.JedisConfig;
+import com.redis.disconf.util.JedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class DisconfTask {
      * @return
      */
     private boolean generateLock(){
-        boolean result = redisService.setLockKey(REDIS_KEY, REDIS_VALUE, 10);
+        boolean result = JedisUtil.tryLock(REDIS_KEY, REDIS_VALUE, 10);
         System.out.println("set lock key: " + REDIS_KEY + ", value: " + REDIS_VALUE + ", seconds: " + 10 + ", result: " + result);
         return result;
     }
