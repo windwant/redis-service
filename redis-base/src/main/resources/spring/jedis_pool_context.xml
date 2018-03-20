@@ -16,7 +16,7 @@
     <bean id="jedisPool"
           class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="PoolConfig"/>
-        <constructor-arg index="1" value="${redis.master.host}"/>
+        <constructor-arg index="1" value="${redis.master.host}" type="java.lang.String"/>
         <constructor-arg index="2" value="${redis.master.port}" type="int"/>
     </bean>
 </beans>
