@@ -6,31 +6,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd">
 
-    <bean id="jedisConnFactory"
-          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:use-pool="true" p:host-name="${redis.master.host}" p:port="${redis.master.port}"/>
-
-       <!-- redis template definition -->
-    <bean id="redisTemplate"
-          class="org.springframework.data.redis.core.RedisTemplate"
-          p:connection-factory-ref="jedisConnFactory">
-        <property name="valueSerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-        </property>
-    </bean>
-
-    <!-- redis=========================================================================================== -->
-    <!--Redis命名空间-->
-    <bean id="mdpListener" class="com.redis.pubsub.service.impl.MessageDelegateListenerImpl" />
-    <bean id="selfDelegateListener" class="com.redis.pubsub.service.impl.SelfDefineMessageDelegateImpl" />
-
-    <!--配置redis listener listener-container-->
-    <redis:listener-container connection-factory="jedisConnFactory">
-        <redis:listener ref="mdpListener" topic="springdata* springtemplate*" />
-        <redis:listener ref="selfDelegateListener" method="handleMessage"
-                        topic="springdata* cctv6 nbtv hello*" />
-    </redis:listener-container>
-
     <!-- spring data===================================================================================== -->
 
     <!-- Bean Configuration -->

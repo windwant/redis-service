@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:redis="http://www.springframework.org/schema/redis"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd">
+
+    <!-- redis=========================================================================================== -->
+    <!--Redis命名空间-->
+    <bean id="mdpListener" class="com.redis.pubsub.service.impl.MessageDelegateListenerImpl" />
+    <bean id="selfDelegateListener" class="com.redis.pubsub.service.impl.SelfDefineMessageDelegateImpl" />
+
+    <!--配置redis listener listener-container-->
+    <redis:listener-container connection-factory="jedisConnFactory">
+        <redis:listener ref="mdpListener" topic="springdata* springtemplate*" />
+        <redis:listener ref="selfDelegateListener" method="handleMessage"
+                        topic="springdata* cctv6 nbtv hello*" />
+    </redis:listener-container>
+    <!-- ================================================================================================ -->
+</beans>

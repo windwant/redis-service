@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * 自定义消息接口实现
  */
-public class DefaultSelfDefineMessageDelegate implements SelfDefineMessageDelegate {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultSelfDefineMessageDelegate.class);
+public class SelfDefineMessageDelegateImpl implements SelfDefineMessageDelegate {
+    private static final Logger logger = LoggerFactory.getLogger(SelfDefineMessageDelegateImpl.class);
 
     public void handleMessage(String message) {
         logger.info("handleMessage(String message): {}", message);
