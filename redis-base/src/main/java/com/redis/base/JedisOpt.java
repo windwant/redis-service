@@ -15,7 +15,6 @@ import redis.clients.jedis.ShardedJedisPool;
  * Hello world!
  *
  */
-@Component("jedisOpt")
 public class JedisOpt
 {
 

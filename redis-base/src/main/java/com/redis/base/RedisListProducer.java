@@ -2,6 +2,7 @@ package com.redis.base;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 import javax.annotation.PostConstruct;
 
@@ -12,26 +13,24 @@ import javax.annotation.PostConstruct;
 public class RedisListProducer implements Runnable {
 
     @Autowired
-    JedisOpt jedisOpt;
+    private ShardedJedisPool shardedJedisPool;
 
     public void run(){
-        ShardedJedis jedis = jedisOpt.getShardedRedisClient();
+        ShardedJedis jedis = shardedJedisPool.getResource();
+        if(jedis == null) return;
         int i = 0;
         try {
             while (i < Integer.MAX_VALUE){
                 jedis.lpush(BaseConstants.REDIS_LIST_KEY, String.valueOf(i));
                 System.out.println("produce list ele: " + i);
-                try {
-                    if(i > 10) {
-                        Thread.sleep(3000);
-                    }
-                } catch (InterruptedException e) {
-
-                }
+                Thread.sleep(2000);
                 i++;
             }
-        }finally {
-            jedisOpt.returnShardedResource(jedis);
+        } catch (InterruptedException e) {
+        } finally {
+            if(jedis != null){
+                jedis.close();
+            }
         }
     }
 

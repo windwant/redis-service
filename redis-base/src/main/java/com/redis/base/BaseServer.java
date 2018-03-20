@@ -7,7 +7,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class BaseServer {
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring/*.xml");
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+                new String[]{"spring/applicationContext.xml",
+                        "spring/jedis_sharded_context.xml"});
         ctx.start();
         ctx.registerShutdownHook();
     }
