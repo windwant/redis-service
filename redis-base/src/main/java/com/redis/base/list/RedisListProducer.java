@@ -1,21 +1,17 @@
-package com.redis.base;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.redis.base.list;
+import com.redis.base.BaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * Created by Administrator on 18-3-20.
  */
 @Component
-public class RedisListConsumer implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RedisListConsumer.class);
+public class RedisListProducer implements Runnable {
 
     @Autowired
     private ShardedJedisPool shardedJedisPool;
@@ -23,18 +19,15 @@ public class RedisListConsumer implements Runnable {
     public void run(){
         ShardedJedis jedis = shardedJedisPool.getResource();
         if(jedis == null) return;
+        int i = 0;
         try {
-            Thread.sleep(10000);
-            while (true) {
-                System.out.println("consumer wait for list ele ... ");
-                List<String> redisList = jedis.brpop(5, BaseConstants.REDIS_LIST_KEY);
-                if (redisList != null && !redisList.isEmpty()) {
-                    System.out.println("consume list ele: " + redisList.get(1));
-                }
-                Thread.sleep(1000);
+            while (i < Integer.MAX_VALUE){
+                jedis.lpush(BaseConstants.REDIS_LIST_KEY, String.valueOf(i));
+                System.out.println("produce list ele: " + i);
+                Thread.sleep(2000);
+                i++;
             }
         } catch (InterruptedException e) {
-
         } finally {
             if(jedis != null){
                 jedis.close();
@@ -43,7 +36,7 @@ public class RedisListConsumer implements Runnable {
     }
 
     @PostConstruct
-    public void consume(){
+    public void produce(){
         new Thread(this).start();
     }
 }
