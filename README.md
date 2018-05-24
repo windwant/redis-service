@@ -1,4 +1,4 @@
-# redis-test
+# redis-service
 java spring redies：
 
 订阅/发布系统: pubsub；
