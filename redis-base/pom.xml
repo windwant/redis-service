@@ -7,11 +7,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.redis.test</groupId>
-    <artifactId>redis-test</artifactId>
+    <groupId>com.redis.base</groupId>
+    <artifactId>redis-base</artifactId>
     <packaging>jar</packaging>
 
-    <name>redis-test</name>
+    <name>redis-base</name>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
