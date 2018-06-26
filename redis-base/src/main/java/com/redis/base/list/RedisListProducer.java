@@ -6,6 +6,7 @@ import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Administrator on 18-3-20.
@@ -24,7 +25,7 @@ public class RedisListProducer implements Runnable {
             while (i < Integer.MAX_VALUE){
                 jedis.lpush(BaseConstants.REDIS_LIST_KEY, String.valueOf(i));
                 System.out.println("produce list ele: " + i);
-                Thread.sleep(2000);
+                Thread.sleep(ThreadLocalRandom.current().nextInt(3)*1000);
                 i++;
             }
         } catch (InterruptedException e) {
