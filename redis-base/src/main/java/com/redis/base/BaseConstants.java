@@ -9,6 +9,9 @@ public interface BaseConstants {
     String REDIS_SET_KEY = "redis_set";
     String REDIS_ZSET_KEY = "redis_zset";
     String REDIS_BIT_KEY = "redis_bit";
+    String REDIS_HLL_KEY = "redis_hll";
+
+    String REDIS_VISIT_USER = "user";
 
     String REDIS_DEFAULT_HOST = "localhost";
     int REDIS_DEFAULT_PORT = 6379;
