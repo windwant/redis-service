@@ -1,6 +1,7 @@
 package com.redis.base.pipeline;
 
 import com.redis.base.BaseConstants;
+import com.redis.base.core.PRedis;
 import jdk.nashorn.internal.runtime.SharedPropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,21 +13,14 @@ import redis.clients.jedis.*;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * Redis pipeline 异步执行
  * Created by Administrator on 18-3-20.
  */
-public class RedisPipeline {
+public class RedisPipeline extends PRedis{
     private static final Logger logger = LoggerFactory.getLogger(RedisPipeline.class);
-
-    static ShardedJedisPool shardedJedisPool = null;
-    static {
-        List<JedisShardInfo> shards = new ArrayList<>();
-        shards.add(new JedisShardInfo("localhost", 6379));
-        shardedJedisPool = new ShardedJedisPool(new JedisPoolConfig(), shards);
-    }
-
 
     /**
      * string set pipe
@@ -42,7 +36,7 @@ public class RedisPipeline {
                 logger.info("pipe set: {}", entry.toString());
             });
             List<Object> results = pipeline.getResults();
-            results.stream().forEach(item -> System.out.println(new String((byte[]) item)));
+            results.stream().forEach(item -> logger.info(new String((byte[]) item)));
         }catch (Exception e){}
         finally {
             if(jedis != null){
@@ -72,14 +66,6 @@ public class RedisPipeline {
             if(jedis != null){
                 jedis.close();
             }
-        }
-    }
-
-
-
-    public void destroy(){
-        if(shardedJedisPool != null){
-            shardedJedisPool.close();
         }
     }
 
@@ -163,21 +149,24 @@ public class RedisPipeline {
     /**
      * zset zadd zrange
      * @param key
-     * @param values
+     * @param valueScores
      */
-    public void pipeZadd(String key, List<String> values){
+    public void pipeZadd(String key, Map<String, Integer> valueScores){
         ShardedJedis jedis = shardedJedisPool.getResource();
         if(jedis == null) return;
         try {
             ShardedJedisPipeline pipeline = jedis.pipelined();
-            values.stream().forEach(item -> {
-                pipeline.zadd(key, ThreadLocalRandom.current().nextDouble(100), item);
+            valueScores.entrySet().forEach(item -> {
+                pipeline.zadd(key, item.getValue(), item.getKey());
             });
-            logger.info("pipe zset add key: {} values: {}", key, values.toString());
+            logger.info("pipe zset add key: {} values: {}", key, valueScores.keySet().toString());
             List<Object> pipeResult = pipeline.getResults();
             long success = pipeResult.stream().filter(item -> Long.parseLong(String.valueOf(item)) > 0).count();
             logger.info("pipe zset sadd success: {}", success);
             logger.info("{} memebers: {}", key, jedis.zrange(key, 0, -1));
+            logger.info("{} memebers revert: {}", key, jedis.zrevrange(key, 0, -1));
+            Set<Tuple> withScores = jedis.zrangeWithScores(key, 0, -1);
+            logger.info("{} memebers with scores: {}", key, withScores.stream().collect(Collectors.toMap(Tuple::getElement, Tuple::getScore)).toString());
         } finally {
             if(jedis != null){
                 jedis.close();
@@ -205,9 +194,11 @@ public class RedisPipeline {
             add("b");
         }});
 
-        pipe.pipeZadd(BaseConstants.REDIS_ZSET_KEY, new ArrayList() {{
-            add("a");
-            add("b");
+        pipe.pipeZadd(BaseConstants.REDIS_ZSET_KEY, new HashMap<String, Integer>() {{
+            for (int i = 0; i < 20; i++) {
+                int tmp = ThreadLocalRandom.current().nextInt(1, 100);
+                put("user" + tmp, tmp);
+            }
         }});
         pipe.destroy();
     }
