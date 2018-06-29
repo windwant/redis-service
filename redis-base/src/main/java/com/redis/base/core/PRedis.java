@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Administrator on 18-6-26.
  */
 public class PRedis {
-    public static JedisPool jedisPool;
+    public static JedisPool jedisPool; 
 
     public static ShardedJedisPool shardedJedisPool;
 
