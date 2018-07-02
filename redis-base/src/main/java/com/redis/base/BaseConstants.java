@@ -1,5 +1,10 @@
 package com.redis.base;
 
+import redis.clients.jedis.HostAndPort;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Administrator on 18-3-20.
  */
@@ -15,4 +20,13 @@ public interface BaseConstants {
 
     String REDIS_DEFAULT_HOST = "localhost";
     int REDIS_DEFAULT_PORT = 6379;
+
+    Set<HostAndPort> CLUSTER_HOST_AND_PORTS = new HashSet(){{
+        add(new HostAndPort("127.0.0.1", 6380));
+        add(new HostAndPort("127.0.0.1", 6381));
+        add(new HostAndPort("127.0.0.1", 6382));
+        add(new HostAndPort("127.0.0.1", 6383));
+        add(new HostAndPort("127.0.0.1", 6384));
+        add(new HostAndPort("127.0.0.1", 6385));
+    }};
 }

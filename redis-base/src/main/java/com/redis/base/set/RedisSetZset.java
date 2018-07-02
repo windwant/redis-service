@@ -1,7 +1,7 @@
 package com.redis.base.set;
 
 import com.redis.base.BaseConstants;
-import com.redis.base.core.PRedis;
+import com.redis.base.core.PoolRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.*;
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Redis set
  * Created by Administrator on 18-3-20.
  */
-public class RedisSetZset extends PRedis {
+public class RedisSetZset extends PoolRedis {
     private static final Logger logger = LoggerFactory.getLogger(RedisSetZset.class);
 
     /**

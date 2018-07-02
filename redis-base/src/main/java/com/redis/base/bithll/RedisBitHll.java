@@ -1,7 +1,7 @@
 package com.redis.base.bithll;
 
 import com.redis.base.BaseConstants;
-import com.redis.base.core.PRedis;
+import com.redis.base.core.PoolRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.BitOP;
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Redis bit visit statistic
  * Created by Administrator on 18-3-20.
  */
-public class RedisBitHll extends PRedis implements Runnable{
+public class RedisBitHll extends PoolRedis implements Runnable{
     private static final Logger logger = LoggerFactory.getLogger(RedisBitHll.class);
 
     private int duration;

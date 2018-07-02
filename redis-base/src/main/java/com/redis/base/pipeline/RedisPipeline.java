@@ -1,16 +1,12 @@
 package com.redis.base.pipeline;
 
 import com.redis.base.BaseConstants;
-import com.redis.base.core.PRedis;
-import jdk.nashorn.internal.runtime.SharedPropertyMap;
+import com.redis.base.core.PoolRedis;
+import com.redis.base.core.ShardedRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.*;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -19,7 +15,7 @@ import java.util.stream.Collectors;
  * Redis pipeline 异步执行
  * Created by Administrator on 18-3-20.
  */
-public class RedisPipeline extends PRedis{
+public class RedisPipeline extends ShardedRedis {
     private static final Logger logger = LoggerFactory.getLogger(RedisPipeline.class);
 
     /**
