@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPool;
  */
 public class JedisUtil {
 
-    private static JedisPool jp;
+    private static volatile JedisPool jp;
 
     /**
      * 初始化redis pool
